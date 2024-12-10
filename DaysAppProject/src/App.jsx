@@ -1,33 +1,78 @@
-import { Fragment, useState } from 'react'
+import { Fragment, useEffect, useState } from 'react'
 import days from 'dayjs'
+import Square from './components/Square'
+
 
 
 
 function App() {
-
+  
   const [diaActual,setDiaActual] = useState(days().format('DD/MM/YYYY'))
   const [horaActual, setHoraActual] = useState(days().format('HH:mm:ss'))
+  const [minutoUltimo,setMinutoUltimo] = useState(days())
+  const diaValue = days().format('YYYY-MM-DD')
 
   const [contador,setContador] = useState([1])
 
-  const diaValue = days().format('YYYY-MM-DD')
+  const [color,setColor] = useState('green')
+
+  const [flagRevisado,setFlagRevisado] = useState(false)
+  const [sieteDias,setSieteDias] = useState([])
+
+  useEffect(() => {
+
+    const interval = setInterval(() => {
+    
+        const tiempoActual = days();
+       
+      if (tiempoActual.diff(minutoUltimo, 'minute') >= 1) {
+          // Incrementar el contador solo si ha pasado un minuto
+        setContador((prevContador) => [...prevContador, prevContador.length + 1]);
+        setMinutoUltimo(tiempoActual); // Actualizar el tiempo de la última verificación
+        console.log("Paso un minuto")
+      }
+    }, 1000); // Verificar cada segundo
+  
+    // Limpiar el intervalo cuando el componente se desmonte
+    return () => clearInterval(interval);
+
+  }, [minutoUltimo]); // Dependencia en `minutoUltimo`
+  
+
+
+
+  useEffect(() => {
+    if (contador.length >= 7) {
+      setColor('red');
+    } else {
+      setColor('green');
+    }
+  }, [contador]);
+
 
   setInterval(()=>{
     setDiaActual(days().format('DD/MM/YYYY'))
     setHoraActual(days().format('HH:mm:ss'))
+    
   },1000)
 
  
+ 
+  
+
   const handleDates = (e)=>{
     e.preventDefault()
     
   }
   
+
   const aumentarDia = ()=>{
     setContador([...contador,contador.length+1])
-    console.log(contador)
-
   }
+
+
+
+  console.log(sieteDias)
 
   return (
     <Fragment>
@@ -45,14 +90,67 @@ function App() {
           <label htmlFor="FechaFinal">Fecha de vencimiento</label>
           <input type='date' id="FechaFinal"></input>
 
-          <input type='submit' className='text-white m-5 bg-sky-400' onClick={aumentarDia}></input>
+          <input type='submit' className='text-white m-5 bg-sky-400' onClick={aumentarDia} ></input>
 
         </form>
 
-        {contador.length<=7? (
-          contador.map((dias)=>{<span key={dias} className='bg-red-400 w-10 h-5'></span>})
-          ):(
-            console.log("Pasaron mas de 7 dias"))}
+
+        <div className='flex  flex-col justify-center items-center gap-2 w-full'>
+
+          <div className='flex flex-row gap-5 w-[364px]'>
+            <p className='self-start'>Producto</p>
+            <span>99/99/99</span>
+          </div>
+
+          <div className='flex flex-row  items-center bg-white w-[364px] h-10 overflow-hidden'>
+
+            {
+              contador ? (
+                contador.slice(0,7).map((dias, index) => {
+                  return (<Square key={index} index={index} color={color}></Square>)
+                })
+              ) : ("")
+          }
+
+          </div>
+          
+          <div className='flex flex-col items-center'>
+            {
+              contador.length>7 ? (
+              <div>
+                  <p>Ultima revision hace {contador.length} dias</p>
+                  <button onClick={()=>{setFlagRevisado(true);
+                    setSieteDias([...sieteDias,sieteDias.push(7)]);
+                    setContador([1])}}>Revisado</button>
+              </div>
+                
+              ) :""
+            }
+            
+            {flagRevisado ? 
+            
+              <div className='flex justify-end w-[364px]'>
+                {
+                  sieteDias.map((item)=>(
+                    <span key={item} 
+                    className=' bg-purple-500 m-2 w-5 h-5 rounded-full'/>))
+                }
+
+
+              </div>
+                  
+                  
+                  
+                  :""}
+            
+          </div>
+            <p>Dias: {contador.length}</p>
+
+
+        </div>
+
+
+      
 
        
 
