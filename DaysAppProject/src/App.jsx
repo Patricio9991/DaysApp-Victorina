@@ -12,12 +12,16 @@ function App() {
   const [minutoUltimo,setMinutoUltimo] = useState(days())
   const diaValue = days().format('YYYY-MM-DD')
 
-  const [contador,setContador] = useState([1])
+  const [contador,setContador] = useState([1]) //para contar hasta 7 dias
+  const [contadorFull, setContadorFull] = useState([1])
 
   const [color,setColor] = useState('green')
 
   const [flagRevisado,setFlagRevisado] = useState(false)
   const [sieteDias,setSieteDias] = useState([])
+
+
+
 
   useEffect(() => {
 
@@ -25,9 +29,10 @@ function App() {
     
         const tiempoActual = days();
        
-      if (tiempoActual.diff(minutoUltimo, 'minute') >= 1) {
+      if (tiempoActual.diff(minutoUltimo, 'day') >= 1) {
           // Incrementar el contador solo si ha pasado un minuto
-        setContador((prevContador) => [...prevContador, prevContador.length + 1]);
+          setContador((prevContador) => [...prevContador, prevContador.length + 1]);
+          setContadorFull((prevContadorFull) => [...prevContadorFull, prevContadorFull.length + 1]);
         setMinutoUltimo(tiempoActual); // Actualizar el tiempo de la última verificación
         console.log("Paso un minuto")
       }
@@ -68,11 +73,35 @@ function App() {
 
   const aumentarDia = ()=>{
     setContador([...contador,contador.length+1])
+    setContadorFull([...contadorFull,contadorFull.length+1])
+
+  }
+
+  
+
+  function masDeSieteDias(){
+    
+    
+    contadorFull.forEach(dia=>{
+      
+      if(dia % 7 === 0){
+        
+        setSieteDias([...sieteDias, dia]);
+        
+      }
+      
+    })
+    
+    setContador([1])
+    setFlagRevisado(true);
+    
   }
 
 
-
-  console.log(sieteDias)
+  useEffect(()=>{
+    console.log(sieteDias)
+  },[sieteDias])
+  
 
   return (
     <Fragment>
@@ -119,9 +148,7 @@ function App() {
               contador.length>7 ? (
               <div>
                   <p>Ultima revision hace {contador.length} dias</p>
-                  <button onClick={()=>{setFlagRevisado(true);
-                    setSieteDias([...sieteDias,sieteDias.push(7)]);
-                    setContador([1])}}>Revisado</button>
+                  <button onClick={(masDeSieteDias)}>Revisado</button>
               </div>
                 
               ) :""
@@ -131,9 +158,9 @@ function App() {
             
               <div className='flex justify-end w-[364px]'>
                 {
-                  sieteDias.map((item)=>(
-                    <span key={item} 
-                    className=' bg-purple-500 m-2 w-5 h-5 rounded-full'/>))
+                  sieteDias.map((item,index)=>(
+                    <span key={index} 
+                    className='flex bg-purple-500 m-2 w-6 h-6 rounded-full justify-center items-center'>{item}</span>))
                 }
 
 

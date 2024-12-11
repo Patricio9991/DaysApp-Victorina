@@ -31,3 +31,24 @@ function esMultiplo(num1,num2){
 
 
 console.log(esMultiplo(3,2))
+
+
+const contDias = []
+
+ contDias.push(7)
+contDias.push(7)
+
+const nuevaLong = contDias.push(7)
+
+
+
+// const contadorSieteDias = contDias.reduce((acumulador,item)=>{return acumulador+item},0)
+
+let contador = 0
+
+contDias.forEach((item)=>{
+    contador += item
+})
+
+console.log(nuevaLong)
+
