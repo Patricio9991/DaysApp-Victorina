@@ -1,0 +1,68 @@
+import express from 'express'
+import { connectDB } from './DB.js'
+import productoSchema from './model/producto.schema.js'
+
+
+
+
+const server = express()
+const PORT = 4000
+
+server.use(express.json())
+
+
+
+try {
+    connectDB()
+
+    server.listen(PORT,()=>{
+        console.log(`Server on port: ${PORT}`)
+    })
+
+} catch (error) {
+    console.log(error)
+}
+
+
+server.post("/new",async (req,res)=>{
+    let flagRes = false
+    const {productName,fechaInicio,dias} = req.body
+    console.log(req.body) 
+
+    const newProduct = new productoSchema({
+        productName,
+        fechaInicio,
+        dias
+    })
+
+
+    try{
+        await newProduct.save().then(()=>flagRes = true)
+
+        if (flagRes) res.json({mensaje:"Producto Creado"})
+        
+
+    }catch(e){
+        console.log(e._message) 
+    }
+
+    
+    
+
+})
+
+
+server.put('/sumarDia',async(req,res)=>{
+    const {productName,fechaInicio,dias} = req.body
+
+    try{
+
+        const finder = await productoSchema.findOneAndUpdate({productName:productName, fechaInicio:fechaInicio},{dias:dias},{new:true})
+        console.log(finder)
+    } catch(e){
+        console.log(e)
+    }
+
+    
+
+})
