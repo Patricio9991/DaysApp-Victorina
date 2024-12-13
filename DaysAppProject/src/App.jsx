@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useState } from 'react'
+import { Fragment, useCallback, useEffect, useState } from 'react'
 import days from 'dayjs'
 import Square from './components/Square'
 import axios from 'axios'
@@ -25,15 +25,14 @@ function App() {
 
 
 
-  const updateDay = ()=>{
+  const updateDay = useCallback(()=>{
     axios.put('http://localhost:4000/sumarDia',{
       "productName":"chocolate paris",
       "fechaInicio":`13/12/2024`,
       "dias":contadorFull[contadorFull.length-1]
     })
-
-   
-  }
+    
+  },[contadorFull])
 
 
 
