@@ -1,7 +1,7 @@
 import express from 'express'
 import { connectDB } from './DB.js'
 import productoSchema from './model/producto.schema.js'
-
+import cors from 'cors'
 
 
 
@@ -9,7 +9,7 @@ const server = express()
 const PORT = 4000
 
 server.use(express.json())
-
+server.use(cors())
 
 
 try {
