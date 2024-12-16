@@ -24,13 +24,32 @@ try {
 }
 
 
+
+server.get('/allProducts',async(req,res)=>{
+
+    const dataDB = await productoSchema.find({})
+
+    dataDB ? res.json(dataDB) : res.json({"mensaje":"No se pudo traer la info de la db"})
+
+
+})
+
+
+
+function capitalize(word){
+    return word.charAt(0).toUpperCase()+word.slice(1,word.length)
+}
+
+
 server.post("/new",async (req,res)=>{
     let flagRes = false
     const {productName,fechaInicio,dias} = req.body
     console.log(req.body) 
 
+     
+
     const newProduct = new productoSchema({
-        productName,
+        productName: capitalize(productName),
         fechaInicio,
         dias
     })

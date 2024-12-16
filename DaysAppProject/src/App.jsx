@@ -15,19 +15,34 @@ function App() {
   const [minutoUltimo,setMinutoUltimo] = useState(days())
   const diaValue = days().format('YYYY-MM-DD')
 
+  
+  
+  
+  const [flagRevisado,setFlagRevisado] = useState(false)
+  const [sieteDias,setSieteDias] = useState([])
+  
+  const [BTNProdcuto,setBTNProducto] = useState(false)
+
+  const [allData,setAllData] = useState([])
+
+  const getAllProducts = async ()=>{
+    const res = await axios.get('http://localhost:4000/allProducts')
+    setAllData(res.data)
+    
+  }
+  
+  useEffect(()=>{
+    getAllProducts()
+    
+  },[])
+  
+  
+  
+  
   const [contador,setContador] = useState([1]) //para contar hasta 7 dias
   const [contadorFull, setContadorFull] = useState([1])
   
-
   
-
-  const [flagRevisado,setFlagRevisado] = useState(false)
-  const [sieteDias,setSieteDias] = useState([])
-
-  const [BTNProdcuto,setBTNProducto] = useState(false)
-
-
-
   const updateDay = useCallback(()=>{
     axios.put('http://localhost:4000/sumarDia',{
       "productName":"pepe",
@@ -45,7 +60,7 @@ function App() {
     
         const tiempoActual = days();
        
-      if (tiempoActual.diff(minutoUltimo, 'day') >= 1) {
+      if (tiempoActual.diff(minutoUltimo, 'minute') >= 1) {
           // Incrementar el contador solo si ha pasado un minuto
           setContador((prevContador) => [...prevContador, prevContador.length + 1]);
           setContadorFull((prevContadorFull) => [...prevContadorFull, prevContadorFull.length + 1]);
@@ -59,24 +74,18 @@ function App() {
     // Limpiar el intervalo cuando el componente se desmonte
     return () => clearInterval(interval);
 
-  }, [minutoUltimo,updateDay]); // Dependencia en `minutoUltimo`
+  }, [minutoUltimo]); // Dependencia en `minutoUltimo`
   
 
 
 
 
 
-
-  setInterval(()=>{
-    setDiaActual(days().format('DD/MM/YYYY'))
-    setHoraActual(days().format('HH:mm:ss'))
-    
-  },1000)
-
- 
+  
+  
  
   
-
+  
   const productData = (e)=>{
     e.preventDefault()
     console.log(e.target[0].value.toLowerCase())
@@ -96,15 +105,9 @@ function App() {
   
 
 
-
-
-  const aumentarDia = ()=>{
-    setContador([...contador,contador.length+1])
-    setContadorFull([...contadorFull,contadorFull.length+1])
-
-  }
-
   
+  
+
 
   function masDeSieteDias(){
     
@@ -123,6 +126,23 @@ function App() {
     setFlagRevisado(true);
     
   }
+  
+  
+  const aumentarDia = ()=>{
+    setContador([...contador,contador.length+1])
+    setContadorFull([...contadorFull,contadorFull.length+1])
+
+  }
+  
+  
+  
+    setInterval(()=>{
+      setDiaActual(days().format('DD/MM/YYYY'))
+      setHoraActual(days().format('HH:mm:ss'))
+      
+    },1000)
+
+
 
 
   useEffect(()=>{
@@ -133,7 +153,7 @@ function App() {
   return (
     <Fragment>
     
-      <div className='bg-black h-screen text-white flex flex-col items-center '>
+      <div className='bg-black min-h-screen text-white flex flex-col items-center '>
 
         <div className='bg-black flex flex-col items-center '>
 
@@ -158,15 +178,22 @@ function App() {
 
         </div>
 
-        <div className='flex flex-row self-start mt-10 pl-4 border-2 w-full'>
-          <Producto/>
-          <BarraProgresoDiario
-                contador={contador} masDeSieteDias={masDeSieteDias} 
-                flagRevisado={flagRevisado} sieteDias={sieteDias}
-              />
+        
+
+          {allData.map((item,index)=>{return(
             
+            <div className='flex flex-col mt-10 p-4 border-2' key={index}>
+
+              <Producto nameProducto={item.productName} />
+              <BarraProgresoDiario
+                    contador={contador} dia={item.dias} masDeSieteDias={masDeSieteDias} 
+                    flagRevisado={flagRevisado} sieteDias={sieteDias} fecha={item.fechaInicio}
+                  />
+                
+            </div>
+          )})}
             
-        </div>
+        
 
 
       </div>

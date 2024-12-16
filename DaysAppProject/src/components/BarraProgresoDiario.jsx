@@ -6,9 +6,20 @@ import Square from "./Square.jsx";
 
 
 
-export default function BarraProgresoDiario({contador,masDeSieteDias,flagRevisado,sieteDias}){
+export default function BarraProgresoDiario({contador,dia,masDeSieteDias,flagRevisado,sieteDias,fecha}){
 
     const [color,setColor] = useState('green')
+
+    const diasProductoContador = new Array()
+
+    useEffect(()=>{
+
+        for(let i=1; i<= dia; i++) {
+            diasProductoContador.push(i)
+        }
+    
+        console.log(diasProductoContador)
+    },[])
 
     useEffect(() => {
     if (contador.length >= 7) {
@@ -22,11 +33,11 @@ export default function BarraProgresoDiario({contador,masDeSieteDias,flagRevisad
     return(
         <Fragment>
 
-            <div className='flex  flex-col justify-center items-center  w-[450px] '>
+            <div className='flex flex-col justify-center items-center '>
 
                 <div className='flex flex-row gap-5 w-[364px]'>
-                    <p className='self-start'>Producto</p>
-                    <span>99/99/99</span>
+                    <p className='self-start'>Fecha elaboracion</p>
+                    <span>{fecha}</span>
                 </div>
 
                 <div className='flex flex-row  items-center bg-white w-[364px] h-10 overflow-hidden'>
@@ -41,7 +52,7 @@ export default function BarraProgresoDiario({contador,masDeSieteDias,flagRevisad
 
                 
                 </div>
-                <p>Dias: {contador.length}</p>
+                <p>Dias: {dia}</p>
             
                 <div className='flex flex-row items-center'>
                     {

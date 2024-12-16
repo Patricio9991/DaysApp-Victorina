@@ -52,3 +52,26 @@ contDias.forEach((item)=>{
 
 console.log(nuevaLong)
 
+function capitalize(word){
+    return word.charAt(0).toUpperCase()+word.slice(1,word.length)
+}
+
+
+const str = "palabra"
+
+console.log(capitalize(str))
+console.log("-------")
+const dates = ["1/5/2024","6/9/2024","3/7/2024","22/04/2024","12/3/2024"]
+
+
+console.log(dates[0].split('/').join())
+
+const dia = 4
+const array = new Array()
+
+
+
+for(let i=1; i<= dia; i++) {
+    array.push(i)
+}
+console.log(array)
