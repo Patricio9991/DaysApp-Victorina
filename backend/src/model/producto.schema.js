@@ -10,7 +10,10 @@ const productoSchema = new mongoose.Schema({
         type:String,
         required:true
     },
-    dias:Number
+    dias:{
+        type:[],
+        default: 1
+    }
 
 })
 

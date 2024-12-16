@@ -43,15 +43,14 @@ function capitalize(word){
 
 server.post("/new",async (req,res)=>{
     let flagRes = false
-    const {productName,fechaInicio,dias} = req.body
+    const {productName,fechaInicio} = req.body
     console.log(req.body) 
 
      
 
     const newProduct = new productoSchema({
         productName: capitalize(productName),
-        fechaInicio,
-        dias
+        fechaInicio
     })
 
 
@@ -76,7 +75,9 @@ server.put('/sumarDia',async(req,res)=>{
 
     try{
 
-        const finder = await productoSchema.findOneAndUpdate({productName:productName, fechaInicio:fechaInicio},{dias:dias},{new:true})
+        const finder = await productoSchema.findOne({productName:productName, fechaInicio:fechaInicio})
+        finder.dias.push(dias)
+        await finder.save()
         console.log(finder)
     } catch(e){
         console.log(e)

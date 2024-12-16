@@ -6,7 +6,7 @@ import PropTypes from "prop-types";
 
 
 
-export default function FormDataProducto({productData,diaValue,aumentarDia}){
+export default function FormDataProducto({productData,diaValue}){
     return(
         <Fragment>
 
@@ -18,11 +18,8 @@ export default function FormDataProducto({productData,diaValue,aumentarDia}){
             <label htmlFor="FechaElaboracion">Fecha de elaboracion</label>
             <input type='date' id="FechaElaboracion" value={`${diaValue}`}></input>
 
-            <label htmlFor="FechaFinal">Fecha de vencimiento</label>
-            <input type='date' id="FechaFinal" placeholder="Fecha final"></input>
 
-            <input type='submit' className='text-white m-5 bg-sky-400'
-            onClick={aumentarDia}></input>
+            <input type='submit' className='text-white m-5 bg-sky-400'></input>
 
             
 
@@ -35,6 +32,5 @@ export default function FormDataProducto({productData,diaValue,aumentarDia}){
 
 FormDataProducto.propTypes = {
     productData: PropTypes.func,
-    diaValue: PropTypes.string,
-    aumentarDia:PropTypes.func
+    diaValue: PropTypes.string
   };
