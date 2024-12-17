@@ -12,6 +12,7 @@ function App() {
   
   const [diaActual,setDiaActual] = useState(days().format('DD/MM/YYYY'))
   const [horaActual, setHoraActual] = useState(days().format('HH:mm:ss'))
+  const [newCall,setNewCall] = useState(true)
  
   const diaValue = days().format('YYYY-MM-DD')
   
@@ -24,6 +25,8 @@ function App() {
     setAllData(res.data)
     
   }
+
+
   
   useEffect(()=>{
     getAllProducts()

@@ -72,13 +72,13 @@ server.post("/new",async (req,res)=>{
 
 server.put('/sumarDia',async(req,res)=>{
     const {productName,fechaInicio,dias} = req.body
-
+    console.log(req.body)
     try{
 
-        const finder = await productoSchema.findOne({productName:productName, fechaInicio:fechaInicio})
-        finder.dias.push(dias)
-        await finder.save()
-        console.log(finder)
+        const finder = await productoSchema.findOneAndUpdate({productName:productName, fechaInicio:fechaInicio},{$push:{dias:dias}},{upsert:true})
+        res.json(finder)
+    
+        
     } catch(e){
         console.log(e)
     }

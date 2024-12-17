@@ -12,20 +12,24 @@ export default function BarraProgresoDiario({allData}){
     const [color,setColor] = useState('green')
 
     const [contador,setContador] = useState([1]) //para contar hasta 7 dias
-    const [contadorFull, setContadorFull] = useState([1])
+    const [contadorFull, setContadorFull] = useState([])
     const [minutoUltimo,setMinutoUltimo] = useState(days())
     const [sieteDias,setSieteDias] = useState([])
     const [flagRevisado,setFlagRevisado] = useState(false)
 
     
-    const updateDay = useCallback(()=>{
+    useEffect(()=>{setContadorFull(allData.dias)},[])
+
+    
+
+   const updateDay = useCallback(()=>{
       axios.put('http://localhost:4000/sumarDia',{
         "productName":allData.productName,
         "fechaInicio":allData.fechaInicio,
-        "dias":allData.dias[allData.dias.length-1] + 1
+        "dias":allData.dias.length+ 1
       }).then(res=>console.log(res)).catch(e=>console.log(e))
       
-    },[])
+  },[])
     
   
     useEffect(() => {
@@ -54,9 +58,9 @@ export default function BarraProgresoDiario({allData}){
     function masDeSieteDias(){
       
       
-      contadorFull.forEach(dia=>{
+      allData.dias.forEach(dia=>{
         
-        if(dia % 7 === 0){
+        if( allData.dia.length >= 7 && dia % 7 === 0){
           
           setSieteDias([...sieteDias, dia]);
           
@@ -76,25 +80,6 @@ export default function BarraProgresoDiario({allData}){
   
     }
     
-    
-
-
-
-
-
-
-
-
-    // const diasProductoContador = new Array()
-
-    // useEffect(()=>{
-
-    //     for(let i=1; i<= dia; i++) {
-    //         diasProductoContador.push(i)
-    //     }
-    
-    //     console.log(diasProductoContador)
-    // },[])
 
     useEffect(() => {
     if (allData.dias.length >= 7) {
@@ -131,9 +116,9 @@ export default function BarraProgresoDiario({allData}){
             
                 <div className='flex flex-row items-center'>
                     {
-                    allData.dias.length>7 ? (
+                    allData.dias.length>=7 ? (
                     <div>
-                        <p>Ultima revision hace {contador.length} dias</p>
+                        <p>Ultima revision hace {sieteDias[0]} dias</p>
                         <button onClick={(masDeSieteDias)}>Revisado</button>
                     </div>
                         
@@ -142,7 +127,7 @@ export default function BarraProgresoDiario({allData}){
                     
                     {flagRevisado ? 
                     
-                    <div className='flex justify-end w-[364px]'>
+                    <div className='flex justify-end '>
                         {
                         sieteDias.map((item,index)=>(
                             <span key={index} 

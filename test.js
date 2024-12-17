@@ -72,3 +72,10 @@ mascotas.gatos.push("Aurora")
 console.log(mascotas)
 
 
+const lista = ["cala"]
+
+
+lista.push(lista.length+1)
+
+
+console.log(lista)
