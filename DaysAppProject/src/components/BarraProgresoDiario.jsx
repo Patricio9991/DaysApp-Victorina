@@ -7,32 +7,92 @@ import axios from "axios";
 
 
 
-export default function BarraProgresoDiario({allData}){
+export default function BarraProgresoDiario({allData,flagUpdate,setFlagUpdate}){
 
     const [color,setColor] = useState('green')
 
-    const [contador,setContador] = useState([1]) //para contar hasta 7 dias
-    const [contadorFull, setContadorFull] = useState([])
+    const [contador,setContador] = useState([allData.dias.length]) //para contar hasta 7 dias
+    // const [contadorFull, setContadorFull] = useState([])
     const [minutoUltimo,setMinutoUltimo] = useState(days())
     const [sieteDias,setSieteDias] = useState([])
-    const [flagRevisado,setFlagRevisado] = useState(false)
 
-    
-    useEffect(()=>{setContadorFull(allData.dias)},[])
+   
+    // useEffect(()=>{
 
-    
+    //   if (allData.dias.length % 7 === 0){
+    //     for()
+    //   }
 
-   const updateDay = useCallback(()=>{
-      axios.put('http://localhost:4000/sumarDia',{
-        "productName":allData.productName,
-        "fechaInicio":allData.fechaInicio,
-        "dias":allData.dias.length+ 1
-      }).then(res=>console.log(res)).catch(e=>console.log(e))
+
+    //   localStorage.setItem(`dias ${allData.productName}`,JSON.stringify(contador))
+    //   const pepe = localStorage.getItem(`dias ${allData.productName}`)
+    //   console.log(JSON.parse(pepe))
+
+
+    // },[contador,allData])
+ 
+
+    // useEffect(()=>{
+    //   setContadorFull(allData.dias)
       
-  },[])
     
+    // },[allData])
+
+    
+
+  const updateDay = useCallback(async ()=>{
+
+    await axios.put('http://localhost:4000/sumarDia',{
+      "productName":allData.productName,
+      "fechaInicio":allData.fechaInicio,
+      "dias":allData.dias.length+ 1
+      }).then(res=>{
+      console.log(res)
+      setFlagUpdate((prev) => !prev)
+      }).catch(e=>console.log(e))
+      
+    if(allData.dias.length % 7===0){
+      setContador([1])
+    }else{
+      setContador(prevContador => [...prevContador, allData.dias.length + 1])
+    }
+
+      console.log(contador)
+
+  },[allData,setFlagUpdate,contador])
+
+  const revisarProducto = useCallback(async ()=>{
+
+    await axios.put('http://localhost:4000/revisado',{
+      "productName":allData.productName,
+      "fechaInicio":allData.fechaInicio,
+      "dias":allData.dias.length+ 1
+      }).then(res=>{
+      console.log(res)
+      setFlagUpdate((prev) => !prev)
+      
+      }).catch(e=>console.log(e))
+      
+  },[allData,setFlagUpdate])
   
-    useEffect(() => {
+  const deleteProduct = useCallback(async ()=>{
+
+    await axios.put('http://localhost:4000/eliminarProdcuto',{
+      "productName":allData.productName,
+      "fechaInicio":allData.fechaInicio,
+      }).then(res=>{
+
+      console.log(res)
+      setFlagUpdate(!flagUpdate)
+
+      }).catch(e=>console.log(e))
+      
+  },[allData,setFlagUpdate,flagUpdate])
+
+  
+
+  
+  useEffect(() => {
   
       const interval = setInterval(() => {
       
@@ -40,9 +100,10 @@ export default function BarraProgresoDiario({allData}){
          
         if (tiempoActual.diff(minutoUltimo, 'minute') >= 1) {
             // Incrementar el contador solo si ha pasado un minuto
-            setContador((prevContador) => [...prevContador, prevContador.length + 1]);
-            setContadorFull((prevContadorFull) => [...prevContadorFull, prevContadorFull.length + 1]);
+            // setContador((prevContador) => [...prevContador, prevContador.length + 1]);
+            // setContadorFull((prevContadorFull) => [...prevContadorFull, prevContadorFull.length + 1]);
             updateDay()
+            
   
           setMinutoUltimo(tiempoActual); // Actualizar el tiempo de la última verificación
           console.log("Paso un minuto")
@@ -52,31 +113,31 @@ export default function BarraProgresoDiario({allData}){
       // Limpiar el intervalo cuando el componente se desmonte
       return () => clearInterval(interval);
   
-    }, [minutoUltimo,updateDay]); // Dependencia en `minutoUltimo`
+  }, [minutoUltimo,updateDay]); // Dependencia en `minutoUltimo`
     
   
-    function masDeSieteDias(){
+  function masDeSieteDias(){
+
+    //   console.log(flagRevisado)
       
+    // allData.dias.forEach(dia=>{
       
-      allData.dias.forEach(dia=>{
+    //   if(allData.dias.length >= 7 && dia % 7 === 0){
         
-        if( allData.dia.length >= 7 && dia % 7 === 0){
-          
-          setSieteDias([...sieteDias, dia]);
-          
-        }
-        
-      })
+    //     setSieteDias([...sieteDias, dia]);
+    //     console.log(sieteDias)
+    //   }
       
-      setContador([1])
-      setFlagRevisado(true);
-      
-    }
+    // })
     
     
-    const aumentarDia = ()=>{
-      setContador([...contador,contador.length+1])
-      setContadorFull([...contadorFull,contadorFull.length+1])
+    setFlagRevisado(true);
+    
+  }
+    
+    
+  const aumentarDia = ()=>{
+     updateDay()
   
     }
     
@@ -93,61 +154,56 @@ export default function BarraProgresoDiario({allData}){
     return(
         <Fragment>
 
-            <div className='flex flex-col justify-center items-center '>
+          <div className="flex justify-start pt-10 gap-2">
+            <div className='flex flex-col justify-center items-center border-2 p-5  '>
 
-                <div className='flex flex-row gap-5 w-[364px]'>
-                    <p className='self-start'>Fecha elaboracion</p>
-                    <span>{allData.fechaInicio}</span>
-                </div>
+                  
+                  
 
-                <div className='flex flex-row  items-center bg-white w-[364px] h-10 overflow-hidden'>
+                <h2 className="pb-2">{allData.productName}</h2>
 
-                    {
-                    allData.dias ? (
-                        allData.dias.slice(0,7).map((dias, index) => {
-                        return (<Square key={index} index={index} color={color}></Square>)
-                        })
-                    ) : ("")
-                }
+                  <div className='flex flex-row gap-5 w-[364px]'>
+                      <p className='self-start'>Fecha elaboracion</p>
+                      <span>{allData.fechaInicio}</span>
 
+                     
+                  </div>
+
+                  <div className='flex flex-row  items-center bg-white w-[364px] h-10 overflow-hidden'>
+
+                      {
+
+                      allData.dias ? (
+                          contador.map((dias, index) => {
+                          return (<Square key={index} index={index} color={color}></Square>)
+                          })
+                      ) : ("")
+                      
+                      }
+
+                  
+                  </div>
+                  <p>Dias: {allData.dias[allData.dias.length-1]}</p>
+                  <p>Ultima revision {allData.fechaRevision}</p>
+                  
+    
+            </div> 
+
+              <div className="flex flex-col gap-2">
+                <button className="bg-red-800 text-black rounded-full" onClick={deleteProduct}>Eliminar</button>
+                <button className="bg-white text-black" onClick={aumentarDia}>aumentar dia</button>
+
+                {
+                  allData.dias.length > 5 &&  allData.dias.length % 3 === 0 ? (
+                  
+                    <button className="bg-purple-600 text-black mt-auto text-center" onClick={revisarProducto}>Revisado</button>
                 
-                </div>
-                <p>Dias: {allData.dias[allData.dias.length-1]}</p>
-            
-                <div className='flex flex-row items-center'>
-                    {
-                    allData.dias.length>=7 ? (
-                    <div>
-                        <p>Ultima revision hace {sieteDias[0]} dias</p>
-                        <button onClick={(masDeSieteDias)}>Revisado</button>
-                    </div>
-                        
-                    ) :""
-                    }
-                    
-                    {flagRevisado ? 
-                    
-                    <div className='flex justify-end '>
-                        {
-                        sieteDias.map((item,index)=>(
-                            <span key={index} 
-                            className='flex bg-purple-500 m-2 w-6 h-6 rounded-full justify-center items-center'>{item}</span>))
-                        }
+                      
+                  ) :""
+                }
+              </div>
 
-
-                    </div>
-                        
-                        
-                        
-                    :""}
-                    
-                    
-
-                </div>
-
-
-
-            </div>
+          </div>
 
         </Fragment>
     )
@@ -156,8 +212,7 @@ export default function BarraProgresoDiario({allData}){
 
 
 BarraProgresoDiario.propTypes = {
-    contador: PropTypes.array,
-    masDeSieteDias: PropTypes.func,
-    flagRevisado:PropTypes.bool,
-    sieteDias:PropTypes.array,
+    allData: PropTypes.object,
+    flagUpdate: PropTypes.bool,
+    setFlagUpdate: PropTypes.func
   };

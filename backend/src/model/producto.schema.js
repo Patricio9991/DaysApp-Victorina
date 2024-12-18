@@ -10,6 +10,11 @@ const productoSchema = new mongoose.Schema({
         type:String,
         required:true
     },
+    fechaRevision:{
+            type:String,
+            default: 0
+    },
+
     dias:{
         type:[],
         default: 1

@@ -2,7 +2,7 @@ import express from 'express'
 import { connectDB } from './DB.js'
 import productoSchema from './model/producto.schema.js'
 import cors from 'cors'
-
+import days from 'dayjs'
 
 
 const server = express()
@@ -77,6 +77,37 @@ server.put('/sumarDia',async(req,res)=>{
 
         const finder = await productoSchema.findOneAndUpdate({productName:productName, fechaInicio:fechaInicio},{$push:{dias:dias}},{upsert:true})
         res.json(finder)
+    
+        
+    } catch(e){
+        console.log(e)
+    }
+
+    
+
+})
+
+
+server.put('/revisado',async(req,res)=>{
+    const {productName,fechaInicio,dias} = req.body
+
+    const diaRevision = days().format('DD/MM/YYYY')
+
+    const finder = await productoSchema.findOneAndUpdate({productName:productName, fechaInicio:fechaInicio},{fechaRevision:diaRevision},{new:true})
+
+    res.json({"msg":"Revisado"})
+
+    
+
+})
+
+server.put('/eliminarProdcuto',async(req,res)=>{
+    const {productName,fechaInicio} = req.body
+    console.log(req.body)
+    try{
+
+        const finder = await productoSchema.deleteOne({productName:productName, fechaInicio:fechaInicio})
+        res.json({"message":"Producto Eliminado"})
     
         
     } catch(e){

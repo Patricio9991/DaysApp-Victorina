@@ -15,7 +15,7 @@ export default function Producto({nameProducto}){
         <Fragment>
 
             <div className="flex justify-center items-center">
-                <h2 className="pb-2">{nameProducto}</h2>
+                
 
             </div>
 

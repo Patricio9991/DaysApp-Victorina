@@ -1,10 +1,10 @@
-import { Fragment, useCallback, useEffect, useState } from 'react'
+import { Fragment, useEffect, useState } from 'react'
 import days from 'dayjs'
 
 import axios from 'axios'
 import FormDataProducto from './components/FormDataProducto'
 import BarraProgresoDiario from './components/BarraProgresoDiario'
-import Producto from './components/Producto'
+
 
 
 
@@ -12,13 +12,14 @@ function App() {
   
   const [diaActual,setDiaActual] = useState(days().format('DD/MM/YYYY'))
   const [horaActual, setHoraActual] = useState(days().format('HH:mm:ss'))
-  const [newCall,setNewCall] = useState(true)
+  
  
   const diaValue = days().format('YYYY-MM-DD')
   
   const [BTNProdcuto,setBTNProducto] = useState(false)
 
   const [allData,setAllData] = useState([])
+  const [flagUpdate, setFlagUpdate] = useState(false)
 
   const getAllProducts = async ()=>{
     const res = await axios.get('http://localhost:4000/allProducts')
@@ -30,13 +31,14 @@ function App() {
   
   useEffect(()=>{
     getAllProducts()
+    console.log(flagUpdate)
     
-  },[])
+  },[flagUpdate])
   
   
 
   
-  const productData = (e)=>{
+  const productData = async (e)=>{
     e.preventDefault()
     console.log(e.target[0].value.toLowerCase())
     
@@ -45,10 +47,14 @@ function App() {
 
     
 
-    axios.post('http://localhost:4000/new',{
+    await axios.post('http://localhost:4000/new',{
       "productName":e.target[0].value.toLowerCase(),
       "fechaInicio":`${dia}/${mes}/${anio}`
-    }).then(res=>console.log(res)).catch(e=>console.log(e))
+    }).then(res=>{
+      console.log(res)
+      setFlagUpdate((prev) => !prev)
+      e.target.reset()
+      }).catch(e=>console.log(e))
     
   }
 
@@ -96,12 +102,11 @@ function App() {
 
           {allData.map((item,index)=>{return(
             
-            <div className='flex flex-col mt-10 p-4 border-2' key={index}>
+            
 
-              <Producto nameProducto={item.productName} />
-              <BarraProgresoDiario allData={item}/>
-                
-            </div>
+            <BarraProgresoDiario key={index} allData={item} flagUpdate={flagUpdate} setFlagUpdate={setFlagUpdate}/>
+          
+            
           )})}
             
         
