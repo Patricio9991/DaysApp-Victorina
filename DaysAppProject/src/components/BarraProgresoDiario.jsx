@@ -11,8 +11,8 @@ export default function BarraProgresoDiario({allData,flagUpdate,setFlagUpdate}){
 
   const [color,setColor] = useState('green')
 
-  // const render = "https://daysapp-victorina.onrender.com"
-  const local = "http://localhost:4000"
+   const render = "https://daysapp-victorina.onrender.com"
+  // const local = "http://localhost:4000"
    
 
     
@@ -20,7 +20,7 @@ export default function BarraProgresoDiario({allData,flagUpdate,setFlagUpdate}){
   const updateDay = useCallback(async ()=>{
 
     
-    await axios.put(`${local}/sumarDia`,{
+    await axios.put(`${render}/sumarDia`,{
       "productName":allData.productName,
       "fechaInicio":allData.fechaInicio,
       "dias":allData.dias.length+ 1,
@@ -36,7 +36,7 @@ export default function BarraProgresoDiario({allData,flagUpdate,setFlagUpdate}){
 
   const revisarProducto = useCallback(async ()=>{
 
-    await axios.put(`${local}/revisado`,{
+    await axios.put(`${render}/revisado`,{
       "productName":allData.productName,
       "fechaInicio":allData.fechaInicio,
       "dias":allData.dias.length+ 1,
@@ -52,7 +52,7 @@ export default function BarraProgresoDiario({allData,flagUpdate,setFlagUpdate}){
   
   const deleteProduct = useCallback(async ()=>{
 
-    await axios.put(`${local}/eliminarProducto`,{
+    await axios.put(`${render}/eliminarProducto`,{
       "productName":allData.productName,
       "fechaInicio":allData.fechaInicio,
       }).then(res=>{
