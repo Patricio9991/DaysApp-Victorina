@@ -101,7 +101,7 @@ server.put('/revisado',async(req,res)=>{
 
 })
 
-server.put('/eliminarProdcuto',async(req,res)=>{
+server.put('/eliminarProducto',async(req,res)=>{
     const {productName,fechaInicio} = req.body
     console.log(req.body)
     try{
