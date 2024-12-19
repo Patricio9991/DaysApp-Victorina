@@ -22,8 +22,11 @@ function App() {
   const [allData,setAllData] = useState([])
   const [flagUpdate, setFlagUpdate] = useState(false)
 
+      // const local = "http://localhost:4000"
+    const render = "https://daysapp-victorina.onrender.com"
+
   const getAllProducts = async ()=>{
-    const res = await axios.get('http://localhost:4000/allProducts')
+    const res = await axios.get(`${render}/allProducts`)
     setAllData(res.data)
     
   }
@@ -46,8 +49,7 @@ function App() {
     const [anio,mes,dia] = e.target[1].value.split('-')
     console.log(dia,mes,anio)
 
-    // const local = "http://localhost:4000"
-    const render = "https://daysapp-victorina.onrender.com"
+
 
     await axios.post(`${render}/new`,{
       "productName":e.target[0].value.toLowerCase(),
