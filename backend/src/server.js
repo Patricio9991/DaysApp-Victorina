@@ -3,7 +3,7 @@ import { connectDB } from './DB.js'
 import productoSchema from './model/producto.schema.js'
 import cors from 'cors'
 import days from 'dayjs'
-
+import cron from 'node-cron'
 
 const server = express()
 const PORT = 4000
@@ -43,6 +43,7 @@ function capitalize(word){
 
 server.post("/new",async (req,res)=>{
     let flagRes = false
+    
     const {productName,fechaInicio} = req.body
     console.log(req.body) 
 
@@ -50,7 +51,8 @@ server.post("/new",async (req,res)=>{
 
     const newProduct = new productoSchema({
         productName: capitalize(productName),
-        fechaInicio
+        fechaInicio,
+        horaInicial: days()
     })
 
 
@@ -116,4 +118,29 @@ server.put('/eliminarProducto',async(req,res)=>{
 
     
 
+})
+
+
+cron.schedule('* * * * *',async()=>{
+    try{
+        const productos = await productoSchema.find()
+        const ahora = days()
+        console.log(productos)
+        productos.map(async(item)=>{
+            const fechaInicio = item.horaInicial
+            const tiempoTranscurrido = ahora.diff(fechaInicio,'minutes')
+            console.log(tiempoTranscurrido)
+            if(tiempoTranscurrido >=1){
+             
+                await productoSchema.findOneAndUpdate({productName:item.productName, fechaInicio:item.fechaInicio},{$push:{dias:item.dias.length+1}},{upsert:true})
+
+               
+                console.log("tiempo actualizado")
+            }
+        })
+
+
+    }catch (e){
+        console.log(e)
+    }
 })

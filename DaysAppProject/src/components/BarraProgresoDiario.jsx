@@ -1,7 +1,7 @@
 import { Fragment, useCallback, useEffect, useState } from "react"
 import PropTypes from "prop-types";
 import Square from "./Square.jsx";
-import days from 'dayjs'
+// import days from 'dayjs'
 import axios from "axios";
 
 
@@ -10,9 +10,9 @@ import axios from "axios";
 export default function BarraProgresoDiario({allData,flagUpdate,setFlagUpdate}){
 
   const [color,setColor] = useState('green')
-  const [minutoUltimo,setMinutoUltimo] = useState(days())
-  const render = "https://daysapp-victorina.onrender.com"
 
+  // const render = "https://daysapp-victorina.onrender.com"
+  const local = "http://localhost:4000"
    
 
     
@@ -20,7 +20,7 @@ export default function BarraProgresoDiario({allData,flagUpdate,setFlagUpdate}){
   const updateDay = useCallback(async ()=>{
 
     
-    await axios.put(`${render}/sumarDia`,{
+    await axios.put(`${local}/sumarDia`,{
       "productName":allData.productName,
       "fechaInicio":allData.fechaInicio,
       "dias":allData.dias.length+ 1,
@@ -36,7 +36,7 @@ export default function BarraProgresoDiario({allData,flagUpdate,setFlagUpdate}){
 
   const revisarProducto = useCallback(async ()=>{
 
-    await axios.put(`${render}/revisado`,{
+    await axios.put(`${local}/revisado`,{
       "productName":allData.productName,
       "fechaInicio":allData.fechaInicio,
       "dias":allData.dias.length+ 1,
@@ -48,10 +48,11 @@ export default function BarraProgresoDiario({allData,flagUpdate,setFlagUpdate}){
       }).catch(e=>console.log(e))
       
   },[allData,setFlagUpdate])
+
   
   const deleteProduct = useCallback(async ()=>{
 
-    await axios.put(`${render}/eliminarProducto`,{
+    await axios.put(`${local}/eliminarProducto`,{
       "productName":allData.productName,
       "fechaInicio":allData.fechaInicio,
       }).then(res=>{
@@ -66,28 +67,31 @@ export default function BarraProgresoDiario({allData,flagUpdate,setFlagUpdate}){
   
 
   
-  useEffect(() => {
+  // useEffect(() => {
   
-      const interval = setInterval(() => {
+  //     const interval = setInterval(() => {
       
-        const tiempoActual = days();
-         
-        if (tiempoActual.diff(minutoUltimo, 'minute') >= 1) {
-            // Incrementar el contador solo si ha pasado un minuto
-            // setContador((prevContador) => [...prevContador, prevContador.length + 1]);
-            // setContadorFull((prevContadorFull) => [...prevContadorFull, prevContadorFull.length + 1]);
-            updateDay()
+  //       const tiempoActual = days();
+  //       const tiempoTranscurido = tiempoActual.diff(allData.horaInicial, 'minute')
+  //       if (tiempoTranscurido >= 1) {
+  //           // Incrementar el contador solo si ha pasado un minuto
+  //           // setContador((prevContador) => [...prevContador, prevContador.length + 1]);
+  //           // setContadorFull((prevContadorFull) => [...prevContadorFull, prevContadorFull.length + 1]);
+  //           for (let i = 0; i<tiempoTranscurido ; i++){
+
+  //             updateDay()
+  //           }
             
   
-          setMinutoUltimo(tiempoActual); // Actualizar el tiempo de la última verificación
-          console.log("Paso un minuto")
-        }
-      }, 1000); // Verificar cada segundo
+  //          // Actualizar el tiempo de la última verificación
+  //         console.log("Paso un minuto")
+  //       }
+  //     }, 60000); // Verificar cada segundo
     
-      // Limpiar el intervalo cuando el componente se desmonte
-      return () => clearInterval(interval);
+  //     // Limpiar el intervalo cuando el componente se desmonte
+  //     return () => clearInterval(interval);
   
-  }, [minutoUltimo,updateDay]); // Dependencia en `minutoUltimo`
+  // }, [allData.horaInicial,updateDay]); // Dependencia en `minutoUltimo`
     
   
 

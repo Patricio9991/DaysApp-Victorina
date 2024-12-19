@@ -21,6 +21,9 @@ const productoSchema = new mongoose.Schema({
     revisado:{
         type:Boolean,
         default:true
+    },
+    horaInicial:{
+        type:String
     }
 
 })
