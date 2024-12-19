@@ -9,68 +9,42 @@ import axios from "axios";
 
 export default function BarraProgresoDiario({allData,flagUpdate,setFlagUpdate}){
 
-    const [color,setColor] = useState('green')
+  const [color,setColor] = useState('green')
+  const [minutoUltimo,setMinutoUltimo] = useState(days())
 
-    const [contador,setContador] = useState([allData.dias.length]) //para contar hasta 7 dias
-    // const [contadorFull, setContadorFull] = useState([])
-    const [minutoUltimo,setMinutoUltimo] = useState(days())
-    const [sieteDias,setSieteDias] = useState([])
 
    
-    // useEffect(()=>{
-
-    //   if (allData.dias.length % 7 === 0){
-    //     for()
-    //   }
-
-
-    //   localStorage.setItem(`dias ${allData.productName}`,JSON.stringify(contador))
-    //   const pepe = localStorage.getItem(`dias ${allData.productName}`)
-    //   console.log(JSON.parse(pepe))
-
-
-    // },[contador,allData])
- 
-
-    // useEffect(()=>{
-    //   setContadorFull(allData.dias)
-      
-    
-    // },[allData])
 
     
 
   const updateDay = useCallback(async ()=>{
 
+    
     await axios.put('http://localhost:4000/sumarDia',{
       "productName":allData.productName,
       "fechaInicio":allData.fechaInicio,
-      "dias":allData.dias.length+ 1
+      "dias":allData.dias.length+ 1,
+      "revisado": (allData.dias.length > 5 && allData.dias.length % 3 === 0) ? false : true
       }).then(res=>{
       console.log(res)
       setFlagUpdate((prev) => !prev)
       }).catch(e=>console.log(e))
       
-    if(allData.dias.length % 7===0){
-      setContador([1])
-    }else{
-      setContador(prevContador => [...prevContador, allData.dias.length + 1])
-    }
 
-      console.log(contador)
 
-  },[allData,setFlagUpdate,contador])
+  },[allData,setFlagUpdate,])
 
   const revisarProducto = useCallback(async ()=>{
 
     await axios.put('http://localhost:4000/revisado',{
       "productName":allData.productName,
       "fechaInicio":allData.fechaInicio,
-      "dias":allData.dias.length+ 1
+      "dias":allData.dias.length+ 1,
+      "revisado": true
       }).then(res=>{
       console.log(res)
       setFlagUpdate((prev) => !prev)
-      
+
       }).catch(e=>console.log(e))
       
   },[allData,setFlagUpdate])
@@ -116,25 +90,7 @@ export default function BarraProgresoDiario({allData,flagUpdate,setFlagUpdate}){
   }, [minutoUltimo,updateDay]); // Dependencia en `minutoUltimo`
     
   
-  function masDeSieteDias(){
 
-    //   console.log(flagRevisado)
-      
-    // allData.dias.forEach(dia=>{
-      
-    //   if(allData.dias.length >= 7 && dia % 7 === 0){
-        
-    //     setSieteDias([...sieteDias, dia]);
-    //     console.log(sieteDias)
-    //   }
-      
-    // })
-    
-    
-    setFlagRevisado(true);
-    
-  }
-    
     
   const aumentarDia = ()=>{
      updateDay()
@@ -145,16 +101,19 @@ export default function BarraProgresoDiario({allData,flagUpdate,setFlagUpdate}){
     useEffect(() => {
     if (allData.dias.length >= 7) {
         setColor('red');
-    } else {
+        if(allData.revisado === true){
+          setColor('green')
+        }
+    } else{
         setColor('green');
     }
-    }, [allData.dias]);
+    }, [allData.dias,allData.revisado]);
 
 
     return(
         <Fragment>
 
-          <div className="flex justify-start pt-10 gap-2">
+          <div className="flex flex-col justify-start pt-10 gap-2">
             <div className='flex flex-col justify-center items-center border-2 p-5  '>
 
                   
@@ -174,7 +133,7 @@ export default function BarraProgresoDiario({allData,flagUpdate,setFlagUpdate}){
                       {
 
                       allData.dias ? (
-                          contador.map((dias, index) => {
+                        allData.dias.slice(0,7).map((dias, index) => {
                           return (<Square key={index} index={index} color={color}></Square>)
                           })
                       ) : ("")
@@ -189,14 +148,14 @@ export default function BarraProgresoDiario({allData,flagUpdate,setFlagUpdate}){
     
             </div> 
 
-              <div className="flex flex-col gap-2">
-                <button className="bg-red-800 text-black rounded-full" onClick={deleteProduct}>Eliminar</button>
-                <button className="bg-white text-black" onClick={aumentarDia}>aumentar dia</button>
+              <div className="flex flex-row gap-2">
+                <button className="bg-red-800 text-black rounded-full w-20" onClick={deleteProduct}>Eliminar</button>
+                <button className="bg-white text-black rounded-full w-20" onClick={aumentarDia}>aumentar dia</button>
 
                 {
-                  allData.dias.length > 5 &&  allData.dias.length % 3 === 0 ? (
+                  (allData.dias.length > 5 && allData.revisado === false) ? (
                   
-                    <button className="bg-purple-600 text-black mt-auto text-center" onClick={revisarProducto}>Revisado</button>
+                    <button className="bg-purple-600 text-black rounded-full ml-auto text-center w-20" onClick={revisarProducto}>Revisado</button>
                 
                       
                   ) :""

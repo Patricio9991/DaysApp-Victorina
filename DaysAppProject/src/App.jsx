@@ -17,6 +17,7 @@ function App() {
   const diaValue = days().format('YYYY-MM-DD')
   
   const [BTNProdcuto,setBTNProducto] = useState(false)
+  const [flagRes, setFalgRes] = useState(null)
 
   const [allData,setAllData] = useState([])
   const [flagUpdate, setFlagUpdate] = useState(false)
@@ -53,6 +54,13 @@ function App() {
     }).then(res=>{
       console.log(res)
       setFlagUpdate((prev) => !prev)
+      setFalgRes(res.data.mensaje)
+
+      setTimeout(() => {
+        setFalgRes(null)
+      }, 1000);
+
+
       e.target.reset()
       }).catch(e=>console.log(e))
     
@@ -90,7 +98,8 @@ function App() {
               <FormDataProducto 
                 productData={productData} diaValue={diaValue} 
               />
-
+              {flagRes ? <p className="text-white">Producto agregado!</p> : null}
+              
                
             </div>
 

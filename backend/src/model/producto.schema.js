@@ -14,10 +14,13 @@ const productoSchema = new mongoose.Schema({
             type:String,
             default: 0
     },
-
     dias:{
         type:[],
         default: 1
+    },
+    revisado:{
+        type:Boolean,
+        default:true
     }
 
 })

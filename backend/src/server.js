@@ -71,11 +71,11 @@ server.post("/new",async (req,res)=>{
 
 
 server.put('/sumarDia',async(req,res)=>{
-    const {productName,fechaInicio,dias} = req.body
+    const {productName,fechaInicio,dias,revisado} = req.body
     console.log(req.body)
     try{
 
-        const finder = await productoSchema.findOneAndUpdate({productName:productName, fechaInicio:fechaInicio},{$push:{dias:dias}},{upsert:true})
+        const finder = await productoSchema.findOneAndUpdate({productName:productName, fechaInicio:fechaInicio},{$push:{dias:dias},revisado:revisado},{upsert:true})
         res.json(finder)
     
         
@@ -89,11 +89,11 @@ server.put('/sumarDia',async(req,res)=>{
 
 
 server.put('/revisado',async(req,res)=>{
-    const {productName,fechaInicio,dias} = req.body
+    const {productName,fechaInicio,dias,revisado} = req.body
 
     const diaRevision = days().format('DD/MM/YYYY')
 
-    const finder = await productoSchema.findOneAndUpdate({productName:productName, fechaInicio:fechaInicio},{fechaRevision:diaRevision},{new:true})
+    const finder = await productoSchema.findOneAndUpdate({productName:productName, fechaInicio:fechaInicio},{fechaRevision:diaRevision, revisado:revisado},{new:true})
 
     res.json({"msg":"Revisado"})
 
