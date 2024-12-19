@@ -46,9 +46,10 @@ function App() {
     const [anio,mes,dia] = e.target[1].value.split('-')
     console.log(dia,mes,anio)
 
-    
+    // const local = "http://localhost:4000"
+    const render = "https://daysapp-victorina.onrender.com"
 
-    await axios.post('http://localhost:4000/new',{
+    await axios.post(`${render}/new`,{
       "productName":e.target[0].value.toLowerCase(),
       "fechaInicio":`${dia}/${mes}/${anio}`
     }).then(res=>{
