@@ -113,8 +113,8 @@ export default function BarraProgresoDiario({allData,flagUpdate,setFlagUpdate}){
     return(
         <Fragment>
 
-          <div className="flex flex-col justify-start pt-10 gap-2">
-            <div className='flex flex-col justify-center items-center border-2 p-5  '>
+          <div className="flex flex-col w-fit justify-start pt-10 gap-2">
+            <div className='flex flex-col justify-center items-center border-2 '>
 
                   
                   

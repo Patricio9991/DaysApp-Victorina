@@ -84,7 +84,7 @@ function App() {
   return (
     <Fragment>
     
-      <div className='bg-black min-h-screen text-white flex flex-col items-center '>
+      <div className='bg-black min-h-screen min-w-screen  text-white flex flex-col items-center '>
 
         <div className='bg-black flex flex-col items-center '>
 
