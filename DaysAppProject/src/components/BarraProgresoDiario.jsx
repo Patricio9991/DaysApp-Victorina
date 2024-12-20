@@ -12,7 +12,7 @@ export default function BarraProgresoDiario({allData,flagUpdate,setFlagUpdate}){
   const [color,setColor] = useState('green')
 
    const render = "https://daysapp-victorina.onrender.com"
-  // const local = "http://localhost:4000"
+   const local = "http://localhost:4000"
    
 
     
@@ -24,7 +24,7 @@ export default function BarraProgresoDiario({allData,flagUpdate,setFlagUpdate}){
       "productName":allData.productName,
       "fechaInicio":allData.fechaInicio,
       "dias":allData.dias.length+ 1,
-      "revisado": (allData.dias.length > 5 && allData.dias.length % 3 === 0) ? false : true
+
       }).then(res=>{
       console.log(res)
       setFlagUpdate((prev) => !prev)
@@ -40,7 +40,7 @@ export default function BarraProgresoDiario({allData,flagUpdate,setFlagUpdate}){
       "productName":allData.productName,
       "fechaInicio":allData.fechaInicio,
       "dias":allData.dias.length+ 1,
-      "revisado": true
+      "revisado": !allData.revisado
       }).then(res=>{
       console.log(res)
       setFlagUpdate((prev) => !prev)
@@ -65,36 +65,10 @@ export default function BarraProgresoDiario({allData,flagUpdate,setFlagUpdate}){
   },[allData,setFlagUpdate,flagUpdate])
 
   
-
   
-  // useEffect(() => {
-  
-  //     const interval = setInterval(() => {
-      
-  //       const tiempoActual = days();
-  //       const tiempoTranscurido = tiempoActual.diff(allData.horaInicial, 'minute')
-  //       if (tiempoTranscurido >= 1) {
-  //           // Incrementar el contador solo si ha pasado un minuto
-  //           // setContador((prevContador) => [...prevContador, prevContador.length + 1]);
-  //           // setContadorFull((prevContadorFull) => [...prevContadorFull, prevContadorFull.length + 1]);
-  //           for (let i = 0; i<tiempoTranscurido ; i++){
-
-  //             updateDay()
-  //           }
-            
-  
-  //          // Actualizar el tiempo de la última verificación
-  //         console.log("Paso un minuto")
-  //       }
-  //     }, 60000); // Verificar cada segundo
-    
-  //     // Limpiar el intervalo cuando el componente se desmonte
-  //     return () => clearInterval(interval);
-  
-  // }, [allData.horaInicial,updateDay]); // Dependencia en `minutoUltimo`
-    
-  
-
+  // const editProduct = useCallback(async()=>{
+  //   await axios.put(`${render}/editarProducto`,)
+  // })
     
   const aumentarDia = ()=>{
      updateDay()
@@ -157,7 +131,7 @@ export default function BarraProgresoDiario({allData,flagUpdate,setFlagUpdate}){
                 <button className="bg-white text-black rounded-full w-20" onClick={aumentarDia}>aumentar dia</button>
 
                 {
-                  (allData.dias.length > 5 && allData.revisado === false) ? (
+                  (allData.revisado === false) ? (
                   
                     <button className="bg-purple-600 text-black rounded-full ml-auto text-center w-20" onClick={revisarProducto}>Revisado</button>
                 

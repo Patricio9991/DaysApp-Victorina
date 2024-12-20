@@ -121,21 +121,45 @@ server.put('/eliminarProducto',async(req,res)=>{
 })
 
 
+server.put('/editarProducto',async(req,res)=>{
+    const {productName,fechaInicio,newName} = req.body
+    console.log(req.body)
+    try{
+
+        const finder = await productoSchema.findOneAndUpdate({productName:productName, fechaInicio:fechaInicio},{productName:newName})
+        res.json({"message":"Producto Eliminado"})
+    
+        
+    } catch(e){
+        console.log(e)
+    }
+
+    
+
+})
+
+
 cron.schedule('* * * * *',async()=>{
     try{
         const productos = await productoSchema.find()
         const ahora = days()
-        console.log(productos)
+        
         productos.map(async(item)=>{
             const fechaInicio = item.horaInicial
             const tiempoTranscurrido = ahora.diff(fechaInicio,'minutes')
-            console.log(tiempoTranscurrido)
+            
             if(tiempoTranscurrido >=1){
              
                 await productoSchema.findOneAndUpdate({productName:item.productName, fechaInicio:item.fechaInicio},{$push:{dias:item.dias.length+1}},{upsert:true})
+                
+                if(item.dias.length > 6 || item.dias.length % 3 === 0){
+                    
 
+                    await productoSchema.findOneAndUpdate({productName:item.productName, fechaInicio:item.fechaInicio},{revisado: !item.revisado},{upsert:true})
+                    console.log(item)
+                }
                
-                console.log("tiempo actualizado")
+                
             }
         })
 

@@ -22,7 +22,7 @@ function App() {
   const [allData,setAllData] = useState([])
   const [flagUpdate, setFlagUpdate] = useState(false)
 
-    // const local = "http://localhost:4000"
+     const local = "http://localhost:4000"
     const render = "https://daysapp-victorina.onrender.com"
 
   const getAllProducts = async ()=>{
