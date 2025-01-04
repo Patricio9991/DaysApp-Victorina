@@ -11,6 +11,8 @@ import { randomUtils } from './functions/random.js'
 
 const loadingMsgs = ["Despertando a los panaderos","Sacando las cosas", "Secando el pan", "Pintando las facturas", "Poniendo agua a la cafetera"]
 
+console.log(import.meta.env)
+
 function App() {
   
   const [diaActual,setDiaActual] = useState(days().format('DD/MM/YYYY'))
@@ -44,7 +46,7 @@ function App() {
       setIsLoading(false)
     }
     
-  },[serverUrl])
+  },[serverUrl,setIsLoading])
   
   // isLoading ? console.log("buscando data") : console.log("operacion terminada")
 

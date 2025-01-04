@@ -139,30 +139,26 @@ server.put('/editarProducto',async(req,res)=>{
 })
 
 
-cron.schedule('* * * * *',async()=>{
+cron.schedule('0 0 * * *',async()=>{
     try{
         const productos = await productoSchema.find()
-        const ahora = days()
         
-        productos.map(async(item)=>{
-            const fechaInicio = item.horaInicial
-            const tiempoTranscurrido = ahora.diff(fechaInicio,'minutes')
+        
+        for(const item of productos){
+ 
             
-            if(tiempoTranscurrido >=1){
              
-                await productoSchema.findOneAndUpdate({productName:item.productName, fechaInicio:item.fechaInicio},{$push:{dias:item.dias.length+1}},{upsert:true})
+            await productoSchema.findOneAndUpdate({productName:item.productName, fechaInicio:item.fechaInicio},{$push:{dias:item.dias.length+1}},{upsert:true})
                 
-                if(item.dias.length > 6 || item.dias.length % 3 === 0){
+            if(item.dias.length > 6 || item.dias.length % 3 === 0){
                     
 
-                    await productoSchema.findOneAndUpdate({productName:item.productName, fechaInicio:item.fechaInicio},{revisado: !item.revisado},{upsert:true})
-                    console.log(item)
-                }
-               
-                
+                await productoSchema.findOneAndUpdate({productName:item.productName, fechaInicio:item.fechaInicio},{revisado: !item.revisado},{upsert:true})
             }
-        })
-
+            
+            console.log(item)
+                
+        }
 
     }catch (e){
         console.log(e)
