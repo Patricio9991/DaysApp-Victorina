@@ -3,8 +3,10 @@ import { connectDB } from './DB.js'
 import productoSchema from './model/producto.schema.js'
 import cors from 'cors'
 import days from 'dayjs'
-import cron from 'node-cron'
 
+
+import cron from 'node-cron'
+import fs from 'fs'
 const server = express()
 const PORT = 4000
 
@@ -51,10 +53,12 @@ server.post("/new",async (req,res)=>{
 
     const newProduct = new productoSchema({
         productName: capitalize(productName),
-        fechaInicio,
-        horaInicial: days()
+        fechaInicio: days().format('DD/MM/YYYY'),
+        horaInicial:days()
+        
     })
 
+    console.log(newProduct)
 
     try{
         await newProduct.save().then(()=>flagRes = true)
@@ -139,27 +143,41 @@ server.put('/editarProducto',async(req,res)=>{
 })
 
 
+
 cron.schedule('0 0 * * *',async()=>{
+    
     try{
         const productos = await productoSchema.find()
         
         
         for(const item of productos){
  
+            const ahora = days()
+            console.log(ahora)
+            // const diaAntes = days().subtract(1,'day')
+            const diaCreacion = days(item.horaInicial).subtract(1,'days')
+            console.log(diaCreacion);
             
-             
-            await productoSchema.findOneAndUpdate({productName:item.productName, fechaInicio:item.fechaInicio},{$push:{dias:item.dias.length+1}},{upsert:true})
-                
-            if(item.dias.length > 6 || item.dias.length % 3 === 0){
-                    
+      
+            const tiempoTranscurrido = ahora.diff(diaCreacion,'days')
+            console.log(tiempoTranscurrido)
+            if(tiempoTranscurrido > 0) {
 
-                await productoSchema.findOneAndUpdate({productName:item.productName, fechaInicio:item.fechaInicio},{revisado: !item.revisado},{upsert:true})
+                await productoSchema.findOneAndUpdate({productName:item.productName, fechaInicio:item.fechaInicio},{$push:{dias:item.dias.length+1}},{upsert:true})
+                    
+                if(item.dias.length > 6 || item.dias.length % 3 === 0){
+                        
+    
+                    await productoSchema.findOneAndUpdate({productName:item.productName, fechaInicio:item.fechaInicio},{revisado: !item.revisado},{upsert:true})
+                }
             }
             
-            console.log(item)
+            
                 
         }
-
+        console.log('Cron job ejecutado correctamente');
+        const logMsg = `${new Date()} Cron job ejecutado correctamente\n`
+        fs.appendFileSync("cronJobLogs.txt",logMsg)
     }catch (e){
         console.log(e)
     }

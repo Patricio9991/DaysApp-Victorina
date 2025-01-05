@@ -6,6 +6,7 @@
   "dependencies": {
     "cors": "^2.8.5",
     "dayjs": "^1.11.13",
+    "dayjs-timezone-iana-plugin": "^0.1.0",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
     "mongoose": "^8.8.4",
