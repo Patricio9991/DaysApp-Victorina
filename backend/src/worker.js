@@ -7,30 +7,23 @@ import fs from 'fs'
 
 console.log("ejecutando worker.js")
 
+function CronBackgroundWorker(){
 
-try {
-    connectDB()
-
-
-} catch (error) {
-    console.log(error)
-}
-
-cron.schedule('* * * * *',async()=>{
+    cron.schedule('* * * * *',async()=>{
     
-    try{
+    
         const productos = await productoSchema.find()
         
         
         for(const item of productos){
- 
+    
             const ahora = days()
             console.log(ahora)
             // const diaAntes = days().subtract(1,'day')
-            const diaCreacion = days(item.horaInicial).subtract(1,'days') //subtracct for test
+            const diaCreacion = days(item.horaInicial)
             console.log(diaCreacion);
             
-      
+        
             const tiempoTranscurrido = ahora.diff(diaCreacion,'days')
             console.log(tiempoTranscurrido)
             if(tiempoTranscurrido > 0) {
@@ -50,7 +43,21 @@ cron.schedule('* * * * *',async()=>{
         console.log('Cron job ejecutado correctamente');
         const logMsg = `${new Date()} Cron job ejecutado correctamente\n`
         fs.appendFileSync("cronJobLogs.txt",logMsg)
-    }catch (e){
-        console.log(e)
-    }
-})
+
+    })
+    
+
+}
+
+try {
+    connectDB()
+    CronBackgroundWorker()
+
+
+} catch (error) {
+    console.log(error)
+}
+
+
+
+
