@@ -9,7 +9,7 @@ console.log("ejecutando worker.js")
 
 function CronBackgroundWorker(){
 
-    cron.schedule('* * * * *',async()=>{
+    cron.schedule('*/30 * * * *',async()=>{
     
     
         const productos = await productoSchema.find()

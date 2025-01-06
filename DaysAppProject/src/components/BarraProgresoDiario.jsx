@@ -126,6 +126,7 @@ export default function BarraProgresoDiario({allData,flagUpdate,setFlagUpdate,se
 
               <div className="flex flex-row gap-2">
                 <button className="bg-red-800 text-black rounded-full w-20" onClick={deleteProduct}>Eliminar</button>
+                <button className="bg-sky-600 text-black rounded-full w-20" onClick={aumentarDia}>Editar</button>
                 <button className="bg-white text-black rounded-full w-20" onClick={aumentarDia}>aumentar dia</button>
 
                 {
