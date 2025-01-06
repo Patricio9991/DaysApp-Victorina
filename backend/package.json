@@ -1,6 +1,7 @@
 {
   "scripts": {
-    "db": "nodemon src/server.js"
+    "db": "nodemon src/server.js",
+    "cron": "nodemon src/worker.js"
   },
   "type": "module",
   "dependencies": {
