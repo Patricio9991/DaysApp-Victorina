@@ -53,7 +53,7 @@ server.post("/new",async (req,res)=>{
 
     const newProduct = new productoSchema({
         productName: capitalize(productName),
-        fechaInicio: days().format('DD/MM/YYYY'),
+        fechaInicio: fechaInicio,
         horaInicial:days()
         
     })
