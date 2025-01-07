@@ -126,12 +126,12 @@ server.put('/eliminarProducto',async(req,res)=>{
 
 
 server.put('/editarProducto',async(req,res)=>{
-    const {productName,fechaInicio,newName} = req.body
+    const {nombreAnterior,nuevoNombre,fechaInicio} = req.body
     console.log(req.body)
     try{
 
-        const finder = await productoSchema.findOneAndUpdate({productName:productName, fechaInicio:fechaInicio},{productName:newName})
-        res.json({"message":"Producto Eliminado"})
+        const finder = await productoSchema.findOneAndUpdate({productName:nombreAnterior, fechaInicio:fechaInicio},{productName:nuevoNombre})
+        res.json({"message":"Producto Editado"})
     
         
     } catch(e){

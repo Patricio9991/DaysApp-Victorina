@@ -8,6 +8,7 @@ import BarraProgresoDiario from './components/BarraProgresoDiario'
 import {ClockLoader} from 'react-spinners'
 
 import { randomUtils } from './functions/random.js'
+import Swal from 'sweetalert2'
 
 const loadingMsgs = ["Despertando a los panaderos","Sacando las cosas", "Secando el pan", "Pintando las facturas", "Poniendo agua a la cafetera"]
 
@@ -87,6 +88,12 @@ function App() {
 
       e.target.reset()
       }).catch(e=>console.log(e))
+
+      Swal.fire({
+        title: "Producto agregado",
+        text: "",
+        icon: "success"
+      });
     
   }
 
