@@ -130,7 +130,7 @@ server.put('/editarProducto',async(req,res)=>{
     console.log(req.body)
     try{
 
-        const finder = await productoSchema.findOneAndUpdate({productName:nombreAnterior, fechaInicio:fechaInicio},{productName:nuevoNombre})
+        const finder = await productoSchema.findOneAndUpdate({productName:nombreAnterior, fechaInicio:fechaInicio},{productName:capitalize(nuevoNombre)})
         res.json({"message":"Producto Editado"})
     
         
