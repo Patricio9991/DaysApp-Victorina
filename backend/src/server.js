@@ -49,12 +49,15 @@ server.post("/new",async (req,res)=>{
     const {productName,fechaInicio} = req.body
     console.log(req.body) 
 
-     
+    const ahora = new Date()
+
+    const gmt3 = new Date(ahora.getTime() - 3 * 60 * 60 * 1000)
+    console.log(gmt3.toISOString())
 
     const newProduct = new productoSchema({
         productName: capitalize(productName),
         fechaInicio: fechaInicio,
-        horaInicial:days()
+        horaInicial: gmt3.toISOString()
         
     })
 
