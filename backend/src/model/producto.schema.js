@@ -1,6 +1,9 @@
 import mongoose from 'mongoose'
 
 
+let switchToTest = false
+let collectionTarget = switchToTest ? "tests" : "productos"
+
 const productoSchema = new mongoose.Schema({
     productName:{
         type:String,
@@ -24,9 +27,12 @@ const productoSchema = new mongoose.Schema({
     },
     horaInicial:{
         type:String
-    }
+    },
+    cantidad:Number,
+    unidades:String
 
 })
 
 
-export default mongoose.model("productos",productoSchema)
+
+export default mongoose.model(collectionTarget,productoSchema)

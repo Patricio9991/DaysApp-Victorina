@@ -18,22 +18,22 @@ export default function BarraProgresoDiario({allData,flagUpdate,setFlagUpdate,se
 
     
 
-  // const updateDay = useCallback(async ()=>{
+  const updateDay = useCallback(async ()=>{
 
     
-  //   await axios.put(`${serverUrl}/sumarDia`,{
-  //     "productName":allData.productName,
-  //     "fechaInicio":allData.fechaInicio,
-  //     "dias":allData.dias.length+ 1,
+    await axios.put(`${serverUrl}/sumarDia`,{
+      "productName":allData.productName,
+      "fechaInicio":allData.fechaInicio,
+      "dias":allData.dias.length+ 1,
 
-  //     }).then(res=>{
-  //     console.log(res)
-  //     setFlagUpdate((prev) => !prev)
-  //     }).catch(e=>console.log(e))
+      }).then(res=>{
+      console.log(res)
+      setFlagUpdate((prev) => !prev)
+      }).catch(e=>console.log(e))
       
 
 
-  // },[allData,setFlagUpdate,serverUrl])
+  },[allData,setFlagUpdate,serverUrl])
 
   const revisarProducto = useCallback(async ()=>{
 
@@ -137,10 +137,10 @@ export default function BarraProgresoDiario({allData,flagUpdate,setFlagUpdate,se
   },[serverUrl,flagUpdate,setFlagUpdate,allData])
   
 
-  // const aumentarDia = ()=>{
-  //    updateDay()
+  const aumentarDia = ()=>{
+     updateDay()
   
-  // }
+  }
     
 
   useEffect(() => {
@@ -198,7 +198,7 @@ export default function BarraProgresoDiario({allData,flagUpdate,setFlagUpdate,se
                 <RiDeleteBinLine size={50} className=" text-red-500" onClick={deleteProduct}/>
                 
                 <RiEditLine  size={50} className="text-sky-500 " onClick={editProduct}/>
-                {/* <button className="bg-white text-black rounded-full w-20" onClick={aumentarDia}>aumentar dia</button> */}
+                <button className="bg-white text-black rounded-full w-20" onClick={aumentarDia}>aumentar dia</button>
                 
 
                 {

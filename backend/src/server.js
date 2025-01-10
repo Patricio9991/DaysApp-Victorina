@@ -46,7 +46,7 @@ function capitalize(word){
 server.post("/new",async (req,res)=>{
     let flagRes = false
     
-    const {productName,fechaInicio} = req.body
+    const {productName,fechaInicio,cantidad,unidades} = req.body
     console.log(req.body) 
 
     const ahora = new Date()
@@ -57,7 +57,9 @@ server.post("/new",async (req,res)=>{
     const newProduct = new productoSchema({
         productName: capitalize(productName),
         fechaInicio: fechaInicio,
-        horaInicial: gmt3.toISOString()
+        horaInicial: gmt3.toISOString(),
+        cantidad,
+        unidades
         
     })
 

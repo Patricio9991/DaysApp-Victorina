@@ -1,7 +1,8 @@
 {
   "scripts": {
     "db": "nodemon src/server.js",
-    "cron": "nodemon src/worker.js"
+    "cron": "nodemon src/worker.js",
+    "wpp": "node src/BotWpp.js"
   },
   "type": "module",
   "dependencies": {
@@ -12,6 +13,9 @@
     "express": "^4.21.2",
     "mongoose": "^8.8.4",
     "node-cron": "^3.0.3",
-    "nodemon": "^3.1.7"
+    "nodemon": "^3.1.7",
+    "puppeteer": "^24.0.0",
+    "qrcode-terminal": "^0.12.0",
+    "whatsapp-web.js": "^1.26.0"
   }
 }
