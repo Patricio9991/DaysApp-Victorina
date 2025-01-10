@@ -12,7 +12,7 @@ import { BotWpp } from './BotWpp.js'
 
 function CronBackgroundWorker(){
     
-    cron.schedule('* * * * *',async()=>{
+    cron.schedule('0 0 * * *',async()=>{
         
         console.log("ejecutando worker.js")
     
