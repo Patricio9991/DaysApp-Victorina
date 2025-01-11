@@ -15,6 +15,7 @@ const PORT = 4000
 
 server.use(express.json())
 server.use(cors())
+server.use(express.static('public'))
 
 
 try {
