@@ -45,7 +45,7 @@ server.get('/allProducts',async(req,res)=>{
 server.get('/qr',async (req,res)=>{
     
         try {
-            if (!qrCodeData) res.send('No fue posible generar el QR')
+            if (!qrCodeData) return res.send('No fue posible generar el QR')
             const qrImage = await qrcodefunc.toDataURL(qrCodeData)
             res.send(`
 
