@@ -1,12 +1,14 @@
 {
   "scripts": {
-    "db": "nodemon src/server.js",
+    "db": "cross-env TEST=false nodemon src/server.js",
+    "test": "cross-env TEST=true nodemon src/server.js",
     "cron": "nodemon src/worker.js",
     "wpp": "node src/BotWpp.js"
   },
   "type": "module",
   "dependencies": {
     "cors": "^2.8.5",
+    "cross-env": "^7.0.3",
     "dayjs": "^1.11.13",
     "dayjs-timezone-iana-plugin": "^0.1.0",
     "dotenv": "^16.4.7",
@@ -15,6 +17,7 @@
     "node-cron": "^3.0.3",
     "nodemon": "^3.1.7",
     "puppeteer": "^24.0.0",
+    "qrcode": "^1.5.4",
     "qrcode-terminal": "^0.12.0",
     "whatsapp-web.js": "^1.26.0"
   }

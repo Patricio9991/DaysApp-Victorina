@@ -1,8 +1,17 @@
 import mongoose from 'mongoose'
+import {TEST} from '../config/envStuff.js'
 
 
-let switchToTest = false
+console.log(TEST)
+
+let switchToTest = JSON.parse(TEST)
+console.log(switchToTest)
+console.log("----------------------")
+
 let collectionTarget = switchToTest ? "tests" : "productos"
+console.log(collectionTarget)
+
+collectionTarget === "productos" ? console.log("Modo produccion") : console.log("Estamos en modo test") 
 
 const productoSchema = new mongoose.Schema({
     productName:{

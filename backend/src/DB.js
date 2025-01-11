@@ -1,12 +1,10 @@
 import mongoose from "mongoose";
-import dotenv from 'dotenv'
+import { MONGO_CLUSTER_URI } from "./config/envStuff.js";
 
 
-dotenv.config()
-const uriCluster = process.env.MONGO_CLUSTER_URI
-console.log(uriCluster)
+
 
 export async function connectDB(){
-    mongoose.connect(uriCluster)
+    mongoose.connect(MONGO_CLUSTER_URI)
     console.log("Conectado a DB")
 }

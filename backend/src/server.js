@@ -5,9 +5,12 @@ import cors from 'cors'
 import days from 'dayjs'
 
 
+
+
+
 // import cron from 'node-cron'
 // import fs from 'fs'
-const server = express()
+export const server = express()
 const PORT = 4000
 
 server.use(express.json())
