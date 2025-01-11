@@ -1,8 +1,8 @@
 {
   "scripts": {
-    "db": "cross-env TEST=false nodemon src/server.js",
     "test": "cross-env TEST=true nodemon src/server.js",
-    "cron": "nodemon src/worker.js",
+    "db": "cross-env TEST=false nodemon src/server.js",
+    "cron": "cross-env TEST=false nodemon src/worker.js",
     "wpp": "node src/BotWpp.js"
   },
   "type": "module",
