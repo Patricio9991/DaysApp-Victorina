@@ -11,7 +11,7 @@ import days from 'dayjs'
 // import cron from 'node-cron'
 // import fs from 'fs'
 export const server = express()
-const PORT = 4000
+const PORT = process.env.PORT || 3000
 
 server.use(express.json())
 server.use(cors())
