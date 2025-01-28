@@ -4,7 +4,8 @@ import { connectDB } from './DB.js'
 import days from 'dayjs'
 import fs from 'fs'
 import { BotWpp } from './BotWpp.js'
-
+import { restoreOrBackupMongo } from './backupMongoScript.js'
+import { DB_PASSWORD ,DB_NAME } from './config/envStuff.js'
 
 
 
@@ -46,6 +47,7 @@ function CronBackgroundWorker(){
         const productosArevisar = productos.filter((producto)=>{return producto.dias.length >= 6 || (producto.dias.length % 3 === 0 && producto.dias.length > 6 )})
         
         BotWpp(productosArevisar)
+        restoreOrBackupMongo('backup',DB_PASSWORD,DB_NAME)
         
         
         
@@ -65,6 +67,7 @@ function CronBackgroundWorker(){
 try {
     connectDB()
     CronBackgroundWorker()
+
     
 
 
